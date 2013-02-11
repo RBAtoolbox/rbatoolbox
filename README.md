@@ -1,28 +1,3 @@
-I found a bug/missing feature!
-------------------------------
-     
-Issues starting Brackets the first time? Please review [Troubleshooting](https://github.com/adobe/brackets/wiki/Troubleshooting).         
-       
-Brackets bugs are tracked in [the Brackets github issue tracker](https://github.com/adobe/brackets/issues). 
-When filing a new bug, please remember to include:
-
-* Brackets version/sprint number (or commit SHA if you're pulling directly from the repo)
-* Platform/OS version
-* Steps to reproduce problem with actual and expected results
-* Link to test files (you can create a gist on [gist.github.com](https://gist.github.com/) 
-  if that's convenient)       
-       
-More details on how to file an issue can be found [here](https://github.com/adobe/brackets/wiki/How-to-Report-an-Issue).     
-For feature requests, go ahead and file them in the issue tracker; they'll be converted
-to user stories on the [public Brackets backlog*](http://bit.ly/BracketsBacklog).
-
-\* Please excuse the mess in the "Icebox (To Be Reviewed)" list. We're still importing data from our internal system.
-
-I want to help!
----------------
-
-
-
 The RBA Toolbox
 ---------------
 
