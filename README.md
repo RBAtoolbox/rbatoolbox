@@ -30,7 +30,7 @@ When reporting a new bug, please remember to include:
 
 * Platform/OS version
 * Steps to reproduce problem with actual and expected results
-* A minimal working example (MWE)     
+* A minimal working example (MWE). Use e.g. [gist.github.com](https://gist.github.com)
 
 Future development
 -------------------
