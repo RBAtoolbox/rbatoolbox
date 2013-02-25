@@ -91,7 +91,6 @@ switch lower(sig_type)
         f1 = varargin{2};
         f2 = varargin{3};
         length_sec = varargin{4};
-        win_len = 1.1;
         if nargin == 5
         [y ,t] = rbaLogSin(f1,f2,fs,length_sec);
         elseif nargin > 5 && nargin < 9
