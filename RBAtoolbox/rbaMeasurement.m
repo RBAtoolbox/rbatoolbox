@@ -70,7 +70,7 @@ compTime = 2;           % Estimated CPU time
 PsychPortAudio('GetAudioData', recHandle, signalSeconds+totalLatency+compTime);
 
 % initialize matrix for storing the recorded sweeps
-Y = zeros(signalSeconds*fs,N);
+Y = zeros(ceil(signalSeconds*fs),N);
 
 % For-loop START
 for k = 1:N
@@ -90,7 +90,9 @@ for k = 1:N
 
     % Get playback status
     status = PsychPortAudio('GetStatus',playHandle);
-
+    
+    % this while loop stops Matlab from checking for active playback before
+    % the playback actually has started
     while status.Active == 0
         status = PsychPortAudio('GetStatus',playHandle);
     end
@@ -106,8 +108,6 @@ for k = 1:N
             disp('Very high CPU load. Timing or sound glitches are likely to occur.')
         end
     end
-
-    
     % Make sure full sound decay has reached the microphone.
     % 500 ms corresponds to a sound travel distance of 171.5 m. Change this
     % value if any of the room dimensions exceeds 86 m.
@@ -127,7 +127,7 @@ for k = 1:N
     sweepIdx = lags(max(c)==c);
     % since we know the length of the output signal, we only save the same
     % length of the input
-    sweepEndIdx = sweepIdx+length(signal)-1;
+    sweepEndIdx = sweepIdx+length(signal);
     
     % and place the recorded sweep in a matrix
     Y(:,k) = recordedAudio(sweepIdx:sweepEndIdx);
