@@ -10,10 +10,10 @@
 
 % Define measurement signal parameters
 
-%  We are interested in reverberation times in octave bands
-%   [125 250 500 1000 2000 4000]
-f1 = 125*2^(-1/2);
-f2 = 4000*2^(1/2);
+%  Always define the sweep range as large as possible, since noise
+%  otherwise will be amplified at high frequencies.
+f1 = 10;
+f2 = 22050; % Fny
 
 % For applying a time-window the sweep range must be wider than [f1:f2].
 % Note that Nyquist frequency must not be exceeded
