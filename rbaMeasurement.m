@@ -1,4 +1,4 @@
-function y = rbaMeasurement(signal, fs, N, estimatedRT)
+function y = rbaMeasurement(signal, fs, N, estimatedRT, varargin)
 %
 %   Description: Performs a system response measurement with the default
 %   input and output ports of the computer operating system.
@@ -10,6 +10,8 @@ function y = rbaMeasurement(signal, fs, N, estimatedRT)
 %       - fs             : Sampling frequency
 %       - N              : Number of Averages
 %       - estimatedRT    : Estimated reverberation time in seconds
+%       - average        : (optional) Boolean, deciding if results is to be averaged
+%                          or returned as a matrix (default == 1)
 %
 %   Output parameters:
 %       - y             : Measured Signal
@@ -22,11 +24,20 @@ function y = rbaMeasurement(signal, fs, N, estimatedRT)
 %   Acoustic Technology, DTU 2012
 %
 
-
+% input checking
+if nargin < 5
+    average = 1;
+elseif nargin == 5
+    average = varargin{1};
+end
+if average ~= 1 && average ~= 0
+    warning('fifth input "average" must be boolean, i.e. 1 or 0!');
+    average = 1;
+end
 
 % Check if PsychPortAudio is installed
 if  exist('PsychPortAudio','file') ~= 3
-    error('PsychToolbox is required to run rbaMeasurement. Please visit http://psychtoolbox.org/HomePage')
+    error('PsychToolbox is required to run rbaMeasurement. Please visit http://psychtoolbox.org/')
 end
 
 % Disable most status messages from PsychPortAudio during
@@ -70,7 +81,7 @@ compTime = 2;           % Estimated CPU time
 PsychPortAudio('GetAudioData', recHandle, signalSeconds+totalLatency+compTime);
 
 % initialize matrix for storing the recorded sweeps
-Y = zeros(signalSeconds*fs,N);
+Y = zeros(round(signalSeconds*fs),N);
 
 % For-loop START
 for k = 1:N
@@ -79,14 +90,14 @@ for k = 1:N
 
     % Start recording
 
-    PsychPortAudio('Start', recHandle);
+    startTime = PsychPortAudio('Start', recHandle);
     %disp('Recording started')
 
     % Start playback
     PsychPortAudio('Start', playHandle);
 
     % inform the user of the progress
-    disp(['Now recording sweep ' num2str(k) ' out of ' num2str(N)]);
+    disp(['Now performing measurement' num2str(k) ' out of ' num2str(N)]);
 
     % Get playback status
     status = PsychPortAudio('GetStatus',playHandle);
@@ -111,6 +122,7 @@ for k = 1:N
     % Make sure full sound decay has reached the microphone.
     % 500 ms corresponds to a sound travel distance of 171.5 m. Change this
     % value if any of the room dimensions exceeds 86 m.
+    
     soundDecayDistance = 500e-3;
     WaitSecs(soundDecayDistance);
 
@@ -129,9 +141,12 @@ for k = 1:N
     % length of the input
     sweepEndIdx = sweepIdx+length(signal)-1;
     
+    try
     % and place the recorded sweep in a matrix
     Y(:,k) = recordedAudio(sweepIdx:sweepEndIdx);
-
+    catch err
+        error('Recorded signal does not resemble excitation signal.')
+    end
 end
 
 % Close channels
@@ -139,6 +154,12 @@ PsychPortAudio('Close', recHandle);
 PsychPortAudio('Close', playHandle);
 
 % take the ensemble average, i.e. along the 2nd dimension of Y
-y = mean(Y,2);
+if average
+    % do time-averaging on signals
+    y = mean(Y,2);
+else
+    % return all recorded signals
+    y = Y;
+end
 
 end
