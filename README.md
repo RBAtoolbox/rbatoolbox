@@ -1,4 +1,4 @@
-## Note: The RBA Toolbox is still in development, caution is adviced. Help bring the RBA Toolbox to a stable release by reporting bugs in the issue tracker. 
+## Note: This repo is no longer maintained! 
 
 The RBA Toolbox
 ---------------
